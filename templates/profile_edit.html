@@ -6,13 +6,24 @@
     <form method="post">
         <p>
             <strong>Your name:</strong>
-            <input type="text", value="{{user.name}}" name="profile-name">
+            <input type="text" value="{{user.name}}" name="profile-name">
         </p>
         <p>
             <strong>Your email:</strong>
-            <input type="text" value="{{user.email}}", name="profile-email">
+            <input type="text" value="{{user.email}}" name="profile-email">
         </p>
         <button type="submit">Submit</button>
-    </form>
+    </form> <hr>
+
+<h4>If you want to change the password...</h4>
+    <p>
+        <strong>Type the old password:</strong>
+        <input type="password" name="old-password">
+    </p> <br> <br>
+    <p>
+        <strong>Type the new password: </strong>
+        <input type="password" name="new-password">
+    </p> <br> <br>
+    <button>Submit</button>
 
 {% endblock content %}

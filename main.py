@@ -133,6 +133,18 @@ def profile_edit():
     elif request.method == "POST":
         name = request.form.get("profile-name")
         email = request.form.get("profile-email")
+        old_password = request.form.get("old-password")
+        new_password = request.form.get("new-password")
+
+        if old_password and new_password:
+            hashed_old_password = hashlib.sha256(old_password.encode()).hexdigest()
+            hashed_new_password = hashlib.sha256(new_password.encode()).hexdigest()
+
+            # compare both passwords
+            if hashed_old_password == user.password:
+                user.password = hashed_new_password
+            else:
+                return "Old password not correct. Please type in correct password."
 
         # update user object
         user.name = name
@@ -149,7 +161,7 @@ def profile_delete():
     session_token = request.cookies.get("session_token")
 
     # get user from db
-    user = db.query(User).filter_by(session_token=session_token).first()
+    user = db.query(User).filter_by(session_token=session_token, deleted=False).first()
 
     if request.method == "GET":
         if user:  # push user inside it
@@ -157,8 +169,9 @@ def profile_delete():
         else:
             return redirect(url_for("index"))
     elif request.method == "POST":
-        # delete user from the database
-        db.delete(user)
+        # mark the deleted file as True (bool-value); fake delete, user stays in database
+        user.deleted = True
+        db.add(user)
         db.commit()
         return redirect(url_for("index"))
 
